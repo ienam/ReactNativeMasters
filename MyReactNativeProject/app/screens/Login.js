@@ -3,7 +3,7 @@ import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 
 export default class Login extends Component {
     static navigationOptions = {
-        title: "Login"
+        title: null
     };
 
     render() {
