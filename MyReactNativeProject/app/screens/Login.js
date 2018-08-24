@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 
-import { NavigationActions, StackActions } from "react-navigation";
+import { NavigationActions } from "react-navigation";
 
 export default class Login extends Component {
     static navigationOptions = {
@@ -21,16 +21,7 @@ export default class Login extends Component {
                 <Button
                     title="Login"
                     onPress={() => {
-                        let resetAction = StackActions.reset({
-                            index: 0,
-                            actions: [
-                                NavigationActions.navigate({
-                                    routeName: "LandingPage",
-                                    params: { loginName: "Bogart" }
-                                })
-                            ]
-                        });
-                        this.props.navigation.dispatch(resetAction);
+                        push("LandingPage", { loginName: "Bogart" });
                     }}
                 />
             </View>
