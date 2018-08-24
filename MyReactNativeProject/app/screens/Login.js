@@ -8,29 +8,60 @@ export default class Login extends Component {
         header: null
     };
 
+    constructor(props) {
+        super(props);
+        this.state = {
+            userName: "",
+            password: ""
+        };
+    }
+
+    login = () => {
+        if (this.state.userName == "" || this.state.password == "") {
+            Alert.alert(
+                "Validation error",
+                "User name and password must be filled in"
+            );
+            return;
+        }
+        let resetAction = StackActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({
+                    routeName: "TabNavigator",
+                    params: { foo: this.state.userName },
+                    action: NavigationActions.setParams({
+                        params: {
+                            userName: this.state.userName
+                        },
+                        key: "Settings"
+                    })
+                })
+            ]
+        });
+        this.props.navigation.dispatch(resetAction);
+    };
+
     render() {
-        const { push } = this.props.navigation;
+        const loginMethod = this.login;
         return (
             <View style={styles.mainView}>
                 <View style={styles.topSpacer} />
                 <Text>User Name:</Text>
-                <TextInput />
+                <TextInput
+                    value={this.state.userName}
+                    onChangeText={userName => this.setState({ userName })}
+                />
                 <Text>Password:</Text>
-                <TextInput />
+                <TextInput
+                    value={this.state.password}
+                    onChangeText={password => this.setState({ password })}
+                />
                 <View style={styles.buttonSpacer} />
                 <Button
                     title="Login"
                     onPress={() => {
-                        let resetAction = StackActions.reset({
-                            index: 0,
-                            actions: [
-                                NavigationActions.navigate({
-                                    routeName: "TabNavigator",
-                                    params: { loginName: "Bogart" }
-                                })
-                            ]
-                        });
-                        this.props.navigation.dispatch(resetAction);
+                        loginMethod();
                     }}
                 />
             </View>
