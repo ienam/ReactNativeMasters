@@ -1,26 +1,69 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Alert } from "react-native";
+import { StyleSheet, Text, View, Button, TextInput, Alert } from "react-native";
 
-export default class LandingPage extends Component {
-    static navigationOptions = ({ navigation, screenProps }) => ({
-        title: "Landing for " + navigation.state.params.loginName,
-        headerTintColor: "#FFFFFF",
-        headerStyle: styles.headerStyle,
-        headerRight: (
-            <TouchableOpacity
-                onPress={() => {
-                    navigation.navigate("Tos");
-                }}
-            >
-                <Text style={styles.headerButtonStyle}>Terms</Text>
-            </TouchableOpacity>
-        )
-    });
+import { NavigationActions, StackActions } from "react-navigation";
+
+export default class Login extends Component {
+    static navigationOptions = {
+        header: null
+    };
+
+    constructor(props) {
+        super(props);
+        this.state = {
+            userName: "",
+            password: ""
+        };
+    }
+
+    login = () => {
+        if (this.state.userName == "" || this.state.password == "") {
+            Alert.alert(
+                "Validation error",
+                "User name and password must be filled in"
+            );
+            return;
+        }
+        let resetAction = StackActions.reset({
+            index: 0,
+            actions: [
+                NavigationActions.navigate({
+                    routeName: "TabNavigator",
+                    params: { foo: this.state.userName },
+                    action: NavigationActions.setParams({
+                        params: {
+                            userName: this.state.userName
+                        },
+                        key: "Settings"
+                    })
+                })
+            ]
+        });
+        this.props.navigation.dispatch(resetAction);
+    };
 
     render() {
+        const loginMethod = this.login;
         return (
             <View style={styles.mainView}>
-                <Text>Landing Page</Text>
+                <View style={styles.topSpacer} />
+                <Text>User Name:</Text>
+                <TextInput
+                    value={this.state.userName}
+                    onChangeText={userName => this.setState({ userName })}
+                />
+                <Text>Password:</Text>
+                <TextInput
+                    value={this.state.password}
+                    onChangeText={password => this.setState({ password })}
+                />
+                <View style={styles.buttonSpacer} />
+                <Button
+                    title="Login"
+                    onPress={() => {
+                        loginMethod();
+                    }}
+                />
             </View>
         );
     }
@@ -28,13 +71,14 @@ export default class LandingPage extends Component {
 
 const styles = StyleSheet.create({
     mainView: {
-        flex: 1
+        flex: 1,
+        flexDirection: "column",
+        backgroundColor: "#BBDEFB"
     },
-    headerStyle: {
-        backgroundColor: "#2196F3"
+    topSpacer: {
+        flex: 0.3
     },
-    headerButtonStyle: {
-        color: "#FFFFFF",
-        padding: 20
+    buttonSpacer: {
+        flex: 0.2
     }
 });
