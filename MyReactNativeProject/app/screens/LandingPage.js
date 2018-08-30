@@ -1,5 +1,12 @@
 import React, { Component } from "react";
-import { StyleSheet, Text, View, TouchableOpacity, Alert, FlatList } from "react-native";
+import {
+    StyleSheet,
+    Text,
+    View,
+    TouchableOpacity,
+    Alert,
+    FlatList
+} from "react-native";
 
 export default class LandingPage extends Component {
     static navigationOptions = ({ navigation, screenProps }) => ({
@@ -87,7 +94,7 @@ export default class LandingPage extends Component {
                         await this.setState({
                             peopleList: [
                                 { key: "11", fname: "Ronyan", lname: "Flores" },
-                                { key: "12", fname: "Iena", lname: "Mamaril" },
+                                { key: "12", fname: "Ayna", lname: "Mamaril" },
                                 {
                                     key: "5",
                                     fname: "Louie",
