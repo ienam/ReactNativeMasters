@@ -48,12 +48,6 @@ export default class Settings extends Component {
     render() {
         return (
             <View style={styles.mainView}>
-                <View style={styles.rowStyle}>
-                    <Text>User Name:</Text>
-                    <Text style={{ flex: 1, textAlign: "right" }}>
-                        {this.props.screenProps.userName}
-                    </Text>
-                </View>
                 <View style={styles.dateRowStyle}>
                     <Text>Create Date:</Text>
                     <DateControl
