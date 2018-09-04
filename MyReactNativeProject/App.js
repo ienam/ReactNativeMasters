@@ -9,12 +9,14 @@ import { Platform, StyleSheet, Text, View } from "react-native";
 import Login from "./app/screens/Login";
 import TabNavigation from "./app/screens/TabNavigator";
 import Tos from "./app/screens/Tos";
+import TakePicture from "./app/screens/TakePicture";
 
 import { StackNavigator } from "react-navigation";
 
 const NavigationRoutes = {
     Login: { screen: Login },
-    TabNavigator: { screen: TabNavigation }
+    TabNavigator: { screen: TabNavigation },
+    TakePicture: { screen: TakePicture }
 };
 
 export const RootStack = StackNavigator(NavigationRoutes);
