@@ -5,8 +5,11 @@ import {
     View,
     TouchableOpacity,
     Alert,
-    SectionList
+    SectionList,
+    Button
 } from "react-native";
+
+import LaunchService from "../services/LaunchService";
 
 export default class LandingPage extends Component {
     static navigationOptions = ({ navigation, screenProps }) => ({
@@ -27,7 +30,7 @@ export default class LandingPage extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            peopleList: [],
+            launchList: [],
             listRefreshing: false
         };
     }
@@ -36,162 +39,50 @@ export default class LandingPage extends Component {
         this.loadData();
     }
 
-    loadData() {
+    async loadData() {
+        var launchData = await LaunchService.getLaunchesAsync();
         this.setState({
-            peopleList: [
-                {
-                    section: "Employees",
-                    data: [
-                        { key: "1", fname: "Jay", lname: "Casilang" },
-                        { key: "2", fname: "Rex", lname: "Reyes III" },
-                        { key: "3", fname: "Jordan", lname: "Balintac" },
-                        { key: "4", fname: "Allan", lname: "Castro" },
-                        { key: "5", fname: "Louie", lname: "Yap" },
-                        { key: "6", fname: "Amiel", lname: "Zaldua" },
-                        { key: "7", fname: "Mon", lname: "Zalmeda" },
-                        { key: "8", fname: "Rod", lname: "Bocobo" },
-                        { key: "9", fname: "Elther", lname: "Barrientos" },
-                        { key: "10", fname: "Anthony", lname: "Wong" },
-                        { key: "11", fname: "Ronyan", lname: "Flores" },
-                        { key: "12", fname: "Ayna", lname: "Mamaril" },
-                        { key: "13", fname: "Jay", lname: "Casilang" },
-                        { key: "14", fname: "Rex", lname: "Reyes III" },
-                        { key: "15", fname: "Jordan", lname: "Balintac" },
-                        { key: "16", fname: "Allan", lname: "Castro" },
-                        { key: "17", fname: "Louie", lname: "Yap" },
-                        { key: "18", fname: "Amiel", lname: "Zaldua" },
-                        { key: "19", fname: "Mon", lname: "Zalmeda" },
-                        { key: "20", fname: "Rod", lname: "Bocobo" },
-                        { key: "21", fname: "Elther", lname: "Barrientos" },
-                        { key: "22", fname: "Anthony", lname: "Wong" },
-                        { key: "23", fname: "Ronyan", lname: "Flores" },
-                        { key: "24", fname: "Ayna", lname: "Mamaril" }        
-                    ]
-                },
-                {
-                    section: "Customers",
-                    data: [
-                        { key: "1", fname: "Jay", lname: "Casilang" },
-                        { key: "2", fname: "Rex", lname: "Reyes III" },
-                        { key: "3", fname: "Jordan", lname: "Balintac" },
-                        { key: "4", fname: "Allan", lname: "Castro" },
-                        { key: "5", fname: "Louie", lname: "Yap" },
-                        { key: "6", fname: "Amiel", lname: "Zaldua" },
-                        { key: "7", fname: "Mon", lname: "Zalmeda" },
-                        { key: "8", fname: "Rod", lname: "Bocobo" },
-                        { key: "9", fname: "Elther", lname: "Barrientos" },
-                        { key: "10", fname: "Anthony", lname: "Wong" },
-                        { key: "11", fname: "Ronyan", lname: "Flores" },
-                        { key: "12", fname: "Ayna", lname: "Mamaril" },
-                        { key: "13", fname: "Jay", lname: "Casilang" },
-                        { key: "14", fname: "Rex", lname: "Reyes III" },
-                        { key: "15", fname: "Jordan", lname: "Balintac" },
-                        { key: "16", fname: "Allan", lname: "Castro" },
-                        { key: "17", fname: "Louie", lname: "Yap" },
-                        { key: "18", fname: "Amiel", lname: "Zaldua" },
-                        { key: "19", fname: "Mon", lname: "Zalmeda" },
-                        { key: "20", fname: "Rod", lname: "Bocobo" },
-                        { key: "21", fname: "Elther", lname: "Barrientos" },
-                        { key: "22", fname: "Anthony", lname: "Wong" },
-                        { key: "23", fname: "Ronyan", lname: "Flores" },
-                        { key: "24", fname: "Ayna", lname: "Mamaril" }        
-                    ]
-                }
-            ]
+            launchList: launchData
+        });
+    }
+
+    async loadCacheData() {
+        var launchData = await LaunchService.getCachedLaunchesAsync();
+        this.setState({
+            launchList: launchData
         });
     }
 
     renderSeparator = () => {
-        return (
-            <View
-                style={{
-                    height: 1,
-                    width: "86%",
-                    backgroundColor: "#CED0CE",
-                    marginLeft: "14%"
-                }}
-            />
-        );
+        return <View style={styles.separator} />;
     };
 
     render() {
         const navigation = this.props.screenProps;
         return (
             <View style={styles.mainView}>
+                <Button title="Load from Cache" onPress={async () => {
+                    await this.loadCacheData();
+                }}></Button>
+                <Button title="Clear list" onPress={async () => {
+                    this.setState({
+                        launchList: JSON.parse('[]')
+                    });
+                }}></Button>
                 <SectionList
                     style={styles.listView}
-                    sections={this.state.peopleList}
+                    sections={this.state.launchList}
                     ItemSeparatorComponent={this.renderSeparator}
                     refreshing={this.state.listRefreshing}
                     onRefresh={async () => {
-                        await this.setState({ listRefreshing: true });
-                        await new Promise(resolve => setTimeout(resolve, 5000));
-                        await this.setState({
-                            peopleList: [
-                                {
-                                    section: "Employees",
-                                    data: [
-                                        {
-                                            key: "1",
-                                            fname: "Jay",
-                                            lname: "Casilang"
-                                        },
-                                        {
-                                            key: "2",
-                                            fname: "Rex",
-                                            lname: "Reyes III"
-                                        },
-                                        {
-                                            key: "3",
-                                            fname: "Jordan",
-                                            lname: "Balintac"
-                                        },
-                                        {
-                                            key: "4",
-                                            fname: "Louie",
-                                            lname: "Yap"
-                                        },
-                                        {
-                                            key: "5",
-                                            fname: "Amiel",
-                                            lname: "Zaldua"
-                                        }
-                                    ]
-                                },
-                                {
-                                    section: "Customers",
-                                    data: [
-                                        {
-                                            key: "1",
-                                            fname: "Jay",
-                                            lname: "Casilang"
-                                        },
-                                        {
-                                            key: "2",
-                                            fname: "Rex",
-                                            lname: "Reyes III"
-                                        },
-                                        {
-                                            key: "3",
-                                            fname: "Jordan",
-                                            lname: "Balintac"
-                                        },
-                                        {
-                                            key: "4",
-                                            fname: "Louie",
-                                            lname: "Yap"
-                                        }
-                                    ]
-                                }
-                            ]
-                        });
-                        await this.setState({ listRefreshing: false });
+                        await this.loadData();
                     }}
                     renderSectionHeader={({ section }) => (
                         <Text style={styles.sectionHeader}>
-                            {section.section}
+                            {section.agency.name}
                         </Text>
                     )}
+                    keyExtractor={(item, index) => item.id}
                     renderItem={({ item }) => (
                         <TouchableOpacity
                             onPress={() => {
@@ -200,47 +91,20 @@ export default class LandingPage extends Component {
                                 });
                             }}
                         >
-                            <View
-                                style={{
-                                    flex: 1,
-                                    flexDirection: "column",
-                                    paddingTop: 5,
-                                    paddingBottom: 5
-                                }}
-                            >
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        flexDirection: "row",
-                                        alignItems: "center"
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            paddingRight: 10,
-                                            width: 100
-                                        }}
-                                    >
-                                        Last Name:
+                            <View style={styles.listRow}>
+                                <View style={styles.listRowColumn}>
+                                    <Text style={styles.listRowLabel}>
+                                        Launch Name:
                                     </Text>
-                                    <Text>{item.lname}</Text>
+                                    <Text>{item.name}</Text>
                                 </View>
-                                <View
-                                    style={{
-                                        flex: 1,
-                                        flexDirection: "row",
-                                        alignItems: "center"
-                                    }}
-                                >
-                                    <Text
-                                        style={{
-                                            paddingRight: 10,
-                                            width: 100
-                                        }}
-                                    >
-                                        First Name:
+                                <View style={styles.listRowColumn}>
+                                    <Text style={styles.listRowLabel}>
+                                        Location:
                                     </Text>
-                                    <Text>{item.fname}</Text>
+                                    <Text style={styles.listRowContent}>
+                                        {item.location.name}
+                                    </Text>
                                 </View>
                             </View>
                         </TouchableOpacity>
@@ -267,11 +131,38 @@ const styles = StyleSheet.create({
     listView: {
         flex: 1
     },
+    listRow: {
+        flex: 1,
+        flexDirection: "column",
+        paddingTop: 5,
+        paddingBottom: 5,
+        paddingLeft: 10,
+        paddingRight: 10
+    },
+    listRowColumn: {
+        flex: 1,
+        flexDirection: "row",
+        alignItems: "center",
+        flexWrap: "wrap"
+    },
+    listRowLabel: {
+        paddingRight: 10,
+        width: 110
+    },
+    listRowContent: {
+        flex: 1
+    },
     headerStyle: {
         backgroundColor: "#2196F3"
     },
     headerButtonStyle: {
         color: "#FFFFFF",
         padding: 20
+    },
+    separator: {
+        height: 1,
+        backgroundColor: "#CED0CE",
+        paddingLeft: 10,
+        paddingRight: 10
     }
 });
