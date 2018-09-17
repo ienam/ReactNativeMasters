@@ -62,7 +62,7 @@ export default class ImageSelector extends Component {
               <TakePicture style={{flex: 1}} updateUri={params.updateUri.bind(this)} navigation={navigation} />
             </View>
             <View style={{flex: 1}}>
-              <Button style={{width: 100, height: 100}} title="SelectImage"
+              <Button style={{width: 100, height: 100}} title="Select Image"
                     onPress={() => {
                         this.showImagePicker();
                     }}/>
